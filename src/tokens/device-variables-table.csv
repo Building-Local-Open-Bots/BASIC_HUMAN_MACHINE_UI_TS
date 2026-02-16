@@ -1,0 +1,17 @@
+property name,desktop,tablet,mobile
+h1 - font,h1 - font - desktop,h1 - font - tablet,h1 - font - mobile
+h2 - font,h2 - font - desktop,h2 - font - tablet,h2 - font - mobile
+h3 - font,h3 - font - desktop,h3 - font - tablet,h3 - font - mobile
+l - font,l - font - desktop,l - font - tablet,l - font - mobile
+m - font,m - font - desktop,m - font - tablet,m - font - mobile
+s - font,s - font - desktop,s - font - tablet,s - font - mobile
+xxxl - spacer,space-20,space-24,space-32
+xxl - spacer,space-10,space-12,space-16
+xl - spacer,space-5,space-6,space-8
+l - spacer,space-2.5,space-3,space-4
+m - spacer,space-1.25,space-1.5,space-2
+s - spacer,space-0.75,space-1,space-1
+xs - spacer,space-0.25,space-0.5,space-0.5
+l - border - radius,l - border - radius - desktop,l - border - radius - tablet,l - border - radius - mobile
+m - border - radius,m - border - radius - desktop,m - border - radius - tablet,m - border - radius - mobile
+s - border - radius,s - border - radius - desktop,s - border - radius - tablet,s - border - radius - mobile
