@@ -4,4 +4,4 @@
  * Reusable UI components for the OAT ecosystem
  */
 
-export { Sidebar, type SidebarOptions } from './Sidebar';
+export { sidebar, type sidebaroptions } from './sidebar';

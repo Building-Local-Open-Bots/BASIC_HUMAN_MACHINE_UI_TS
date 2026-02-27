@@ -1,4 +1,4 @@
-export const fontVariables = {
+export const fontvariables = {
   human: "human",
   display: "display",
   machine: "machine"

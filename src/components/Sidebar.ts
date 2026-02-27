@@ -17,7 +17,7 @@
  * ```
  */
 
-export interface SidebarOptions {
+export interface sidebaroptions {
   side?: 'left' | 'right';
   collapsed?: boolean;
   width?: string;
@@ -26,15 +26,15 @@ export interface SidebarOptions {
   borderColor?: string;
 }
 
-export class Sidebar {
+export class sidebar {
   private container: HTMLElement;
   private contentArea: HTMLElement;
   private toggleButton: HTMLElement;
-  private options: Required<SidebarOptions>;
+  private options: Required<sidebaroptions>;
   private isCollapsed: boolean;
   private onToggleCallbacks: ((collapsed: boolean) => void)[] = [];
 
-  constructor(options: SidebarOptions = {}) {
+  constructor(options: sidebaroptions = {}) {
     this.options = {
       side: options.side || 'left',
       collapsed: options.collapsed || false,

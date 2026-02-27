@@ -1,9 +1,9 @@
-export type ThemeName = "classic" | "international" | "cofe" | "funky" | "tech" | "edgy";
+export type themename = "classic" | "international" | "cofe" | "funky" | "tech" | "edgy";
 
-export type ThemeTokenValue = string | number;
-export type ThemeTokenSet = Record<string, ThemeTokenValue>;
+export type themetokenvalue = string | number;
+export type themetokenset = Record<string, themetokenvalue>;
 
-export const themeTokens: Record<ThemeName, ThemeTokenSet> = {
+export const themetokens: Record<themename, themetokenset> = {
   classic: {
     "human": "Roboto Serif",
     "display": "Roboto",

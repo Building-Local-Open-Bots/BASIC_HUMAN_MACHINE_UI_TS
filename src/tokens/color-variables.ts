@@ -1,6 +1,6 @@
-export type ColorMode = "light" | "dark";
+export type colormode = "light" | "dark";
 
-export const colorVariables: Record<ColorMode, Record<string, string>> = {
+export const colorvariables: Record<colormode, Record<string, string>> = {
   light: {
     "primary": "primary - light",
     "secondary": "secondary - light",

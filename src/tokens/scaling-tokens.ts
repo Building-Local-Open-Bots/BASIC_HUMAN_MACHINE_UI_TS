@@ -1,8 +1,8 @@
-export type ScaleName = "default" | "large" | "small" | "extra large";
+export type scalename = "default" | "large" | "small" | "extra large";
 
-export type ScalingTokenSet = Record<string, string>;
+export type scalingtokenset = Record<string, string>;
 
-export const scalingTokens: Record<ScaleName, ScalingTokenSet> = {
+export const scalingtokens: Record<scalename, scalingtokenset> = {
   "default": {
     "xl - spacer": "xl - spacer",
     "l - spacer": "xl - spacer",

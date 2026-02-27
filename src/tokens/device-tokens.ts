@@ -1,8 +1,8 @@
-export type DeviceName = "desktop" | "tablet" | "mobile";
+export type devicename = "desktop" | "tablet" | "mobile";
 
-export type DeviceTokenSet = Record<string, string>;
+export type devicetokenset = Record<string, string>;
 
-export const deviceTokens: Record<DeviceName, DeviceTokenSet> = {
+export const devicetokens: Record<devicename, devicetokenset> = {
   desktop: {
     "h1 - font": "h1 - font - desktop",
     "h2 - font": "h2 - font - desktop",
