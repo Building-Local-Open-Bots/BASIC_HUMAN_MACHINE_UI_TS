@@ -17,6 +17,8 @@
  * ```
  */
 
+import type { widgetmeta } from './widget-meta';
+
 export interface sidebaroptions {
   side?: 'left' | 'right';
   collapsed?: boolean;
@@ -27,6 +29,13 @@ export interface sidebaroptions {
 }
 
 export class sidebar {
+  static meta: widgetmeta = {
+    name: 'sidebar',
+    description: 'Collapsible panel fixed to the left or right edge of the screen',
+    category: 'layout',
+    defaultOptions: { side: 'left', collapsed: false, width: '280px' },
+  };
+
   private container: HTMLElement;
   private contentArea: HTMLElement;
   private toggleButton: HTMLElement;
@@ -40,8 +49,8 @@ export class sidebar {
       collapsed: options.collapsed || false,
       width: options.width || '280px',
       collapsedWidth: options.collapsedWidth || '48px',
-      backgroundColor: options.backgroundColor || '#ffffff',
-      borderColor: options.borderColor || '#e5e7eb'
+      backgroundColor: options.backgroundColor || 'var(--color-surface-elevated, #ffffff)',
+      borderColor: options.borderColor || 'var(--color-border-default, #e5e7eb)'
     };
 
     this.isCollapsed = this.options.collapsed;
@@ -113,11 +122,11 @@ export class sidebar {
       cursor: pointer;
       transition: all 0.2s ease-in-out;
       z-index: 50;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      box-shadow: var(--shadow-sm, 0 2px 4px rgba(0, 0, 0, 0.1));
     `;
 
     button.addEventListener('mouseenter', () => {
-      button.style.backgroundColor = '#f9fafb';
+      button.style.backgroundColor = 'var(--color-surface-hover, #f3f4f6)';
       button.style.transform = 'scale(1.1)';
     });
 

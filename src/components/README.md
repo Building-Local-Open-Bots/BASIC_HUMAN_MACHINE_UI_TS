@@ -240,20 +240,42 @@ left.collapse();
 right.expand();
 ```
 
-## Future Components
+## Widget Metadata Convention
 
-Coming soon:
-- `Button` - Reusable button component
-- `Input` - Form input components
-- `Modal` - Modal dialog component
-- `Toolbar` - Application toolbar
-- `Card` - Content card component
+Every component class must declare a `static meta: widgetmeta` property. This allows the blob-webbuilder's Widget Registry to discover and display the component in the widget palette without any manual registration.
+
+```typescript
+import type { widgetmeta } from './widget-meta';
+
+export class mybutton {
+  static meta: widgetmeta = {
+    name: 'mybutton',
+    description: 'A clickable button with configurable label and style',
+    category: 'inputs',
+    defaultOptions: { label: 'Click me', variant: 'primary' },
+  };
+
+  // ... component implementation
+}
+```
+
+### `widgetmeta` fields
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `name` | `string` | ✅ | Unique identifier — must match the class name |
+| `description` | `string` | ✅ | One-line human-readable summary shown in the palette |
+| `category` | `string` | ✅ | Groups widgets in the palette (e.g. `layout`, `navigation`, `inputs`) |
+| `defaultOptions` | `Record<string, unknown>` | — | Reasonable defaults used when dropping the widget onto the canvas |
+
+`widgetmeta` is defined in `./widget-meta.ts` (not `./index.ts`) to avoid circular imports.
 
 ## Contributing
 
 To add a new component:
 
-1. Create component file in `src/components/ComponentName.ts`
-2. Export from `src/components/index.ts`
-3. Document usage in this README
-4. Add examples to blob-webbuilder or other apps
+1. Create `src/components/my-component.ts` (kebab-case filename)
+2. Export a class with **all-lowercase** name (`class mycomponent`)
+3. Add `static meta: widgetmeta` with name, description, and category
+4. Export from `src/components/index.ts`
+5. Document usage in this README
