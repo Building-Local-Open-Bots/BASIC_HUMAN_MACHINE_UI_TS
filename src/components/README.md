@@ -1,23 +1,69 @@
-# BASIC HUMAN MACHINE UI Components
+# BHMUI Components
 
-Reusable UI components for the OAT ecosystem.
+White-label UI components for the BLOB ecosystem. A quickstart — not a constraint.
+Users can override any component, build on top of BHMUI, or create their own library from scratch.
 
-## Sidebar Component
+## Architecture
 
-A fully-featured collapsible sidebar component that can be positioned on either the left or right side of the screen.
+Components follow the **hybrid styling** model:
 
-### Features
+- **`.bhmui-*` CSS class** — owns all themed properties via CSS vars (`background-color`, `border-radius`, `font-family`, `color`). Never defines padding or font-size.
+- **Tailwind utilities** — owns all spatial properties (`px-4 py-2 text-sm`). Set as defaults in `ComponentDefinition`, editable per-instance in the webbuilder.
+- **Result**: changing `--radius-m` in the Token Editor updates every `.bhmui-btn`, `.bhmui-card`, etc. instantly. No rebuild required.
 
-- ✅ Positioned on left or right side
-- ✅ Collapsible/expandable with smooth animations
-- ✅ Toggle button with arrow icon
-- ✅ Customizable width and colors
-- ✅ Accept HTML content or DOM elements
-- ✅ Event callbacks for toggle actions
-- ✅ Fixed positioning (overlays content)
-- ✅ Clean API for programmatic control
+## CSS var reference
 
-### Basic Usage
+All components read from these CSS custom properties (written by `applyTheme()`):
+
+| Variable | Used for |
+|---|---|
+| `--color-primary` | Button backgrounds, links, accents |
+| `--color-on-primary` | Text/icon on primary background |
+| `--color-secondary` | Secondary accents |
+| `--color-background` | Page/canvas background |
+| `--color-surface` | Cards, panels |
+| `--color-surface-elevated` | Dropdowns, modals |
+| `--color-border` | Borders, dividers |
+| `--color-text-primary` | High-emphasis text |
+| `--color-text-default` | Body text |
+| `--color-text-subtle` | Muted/helper text |
+| `--radius-s / m / l / xl / full` | Border radius scale |
+| `--shadow-sm / md` | Box shadows |
+| `--font-human` | Body text font family |
+| `--font-display` | Heading font family |
+| `--font-machine` | Code/number font family |
+
+## Naming convention
+
+| Thing | Pattern | Example |
+|---|---|---|
+| CSS base class | `blob-{component}` | `blob-button` |
+| CSS variant modifier | `blob-{component}--{variant}` | `blob-button--primary` |
+| TypeScript class | `PascalCase` (no prefix) | `Button` |
+
+The `blob-` prefix is readable in generated HTML output and self-identifying to non-coders. TypeScript class names have no prefix because they are scoped by import path.
+
+## Component catalogue
+
+**Layout**: `blob-navbar`, `blob-sidebar`, `blob-card`, `blob-modal`, `blob-tabs`
+
+**Form**: `blob-button`, `blob-input`, `blob-textarea`, `blob-select`, `blob-switch`, `blob-checkbox`, `blob-radio`
+
+**Feedback**: `blob-badge`, `blob-toast`, `blob-spinner`, `blob-progress`
+
+**Content**: `blob-carousel`, `blob-table`
+
+**Typography**: `blob-h1`–`blob-h4`, `blob-body`, `blob-code`, `blob-label`, `blob-caption`
+
+## Adding a new component
+
+1. Create `src/components/my-component.ts` — export a TypeScript class with `.element: HTMLElement`
+2. Call the module-level `injectStyles()` helper to register the `blob-my-component` CSS rules once
+3. CSS rules use CSS vars only — no hardcoded colors, no padding, no font-size
+4. Export from `src/components/index.ts`
+5. Add a `ComponentDefinition` in the webbuilder with `defaultClasses` including the Tailwind layout defaults
+
+
 
 ```typescript
 import { Sidebar } from '@ui/components';
