@@ -1,8 +1,8 @@
 # BHMUI Component Inventory
 
-_Last updated: 2026-03-21_
+_Last updated: 2026-04-01_
 
-This document is the authoritative record of what exists in BHMUI, what is gaps, and what blob-webbuilder specifically needs to build on.
+This document is the authoritative record of everything in BHMUI: themes, components, and their status.
 
 ---
 
@@ -12,108 +12,180 @@ This document is the authoritative record of what exists in BHMUI, what is gaps,
 |---|---|
 | ✅ | Implemented and exported |
 | 🚧 | Stub / partial / draft |
-| ❌ | Needed, not yet built |
+| ❌ | Planned, not yet built |
 
 ---
 
-## Design Tokens
+## Design Token System
 
-All tokens live in `src/tokens/` and are exported from `src/tokens/index.ts`.
+Tokens are implemented as **CSS custom properties** injected at runtime by `applyTheme()` from `src/themes/index.ts`.
 
-| Token file | Export | What it defines | Status |
-|---|---|---|---|
-| `themeTokens.ts` | `themeTokens`, `ThemeName`, `ThemeTokenSet` | Per-theme typography, color references, border radius, shadow | ✅ |
-| `colorVariables.ts` | `colorVariables`, `ColorMode` | Semantic color slots → theme token values (light/dark) | ✅ |
-| `fontVariables.ts` | `fontVariables` | Font role names (`human`, `display`, `machine`) | ✅ |
-| `scalingTokens.ts` | `scalingTokens`, `ScaleName` | Font sizes and spacers per scale (default/large/small/extra large) | ✅ |
-| `deviceTokens.ts` | `deviceTokens`, `DeviceName` | Maps generic tokens → device-specific values (desktop/tablet/mobile) | ✅ |
+### How It Works
+
+```typescript
+import { applyTheme } from '@ui/themes';
+
+// Inject all CSS vars onto :root for the given theme + mode
+applyTheme('classic', 'dark');
+```
+
+All components reference tokens exclusively via CSS `var()` calls inside their `injectStyles()` function — no raw colour values anywhere in component code.
+
+### Theme Files (`src/themes/`)
+
+| File | Export | Status |
+|---|---|---|
+| `classic.ts` | `classicTheme` | ✅ Full (light + dark) |
+| `international.ts` | `internationalTheme` | ✅ Full |
+| `cofe.ts` | `cofeTheme` | ✅ Full |
+| `funky.ts` | `funkyTheme` | ✅ Full |
+| `tech.ts` | `techTheme` | ✅ Full |
+| `edgy.ts` | `edgyTheme` | ✅ Full |
+| `types.ts` | `ThemeDefinition`, `ThemeName`, `ColorMode` | ✅ |
+| `index.ts` | `applyTheme`, all theme objects | ✅ |
 
 ### Available Themes (`ThemeName`)
 
-| Slug | Fonts | Character |
-|---|---|---|
-| `classic` | Roboto Serif / Roboto / Roboto Mono | Clean, neutral |
-| `international` | Noto Serif / Noto Sans / Noto Sans Mono | Multi-script, accessible |
-| `cofe` | Libre Baskerville / Libre Franklin / Fira Code | Warm, editorial |
-| `funky` | — | Expressive |
-| `tech` | — | Technical/developer |
-| `edgy` | — | Bold |
+| Slug | Character |
+|---|---|
+| `classic` | Clean, neutral — BLOB house style |
+| `international` | Multi-script, globally accessible |
+| `cofe` | Warm, editorial |
+| `funky` | Expressive, playful |
+| `tech` | Technical / developer-focused |
+| `edgy` | Bold, high-contrast |
 
-### Token Resolution Chain
+### Key CSS Custom Property Slots
 
-```
-themeTokens[theme]          → raw values (fonts, color references, radii)
-     ↓
-colorVariables[colorMode]   → semantic slots → theme token keys
-     ↓
-deviceTokens[device]        → maps generic roles to device-specific keys
-     ↓
-scalingTokens[scale]        → font sizes + spacers
-```
+| CSS Variable | Role |
+|---|---|
+| `--color-background` | Page / panel background |
+| `--color-surface` | Card / elevated surface |
+| `--color-primary` | Primary action colour |
+| `--color-primary-hover` | Hover state for primary |
+| `--color-text` | Default body text |
+| `--color-text-muted` | Secondary / muted text |
+| `--color-border` | Default border colour |
+| `--color-danger` | Destructive action / error |
+| `--color-success` | Positive / success state |
+| `--color-warning` | Warning state |
+| `--font-sans` | Body / UI font stack |
+| `--font-mono` | Monospace font stack |
+| `--radius-sm`, `--radius-md`, `--radius-lg` | Border radii |
+| `--shadow-sm`, `--shadow-md` | Box shadow levels |
 
 ---
 
 ## Components
 
-All components live in `src/components/` and are exported from `src/components/index.ts`.
+All components are in `src/components/` under three tiers. Import tier-agnostic from the root:
 
-### ✅ Sidebar
+```typescript
+import { Button, Card, Sidebar } from '@ui/components';
+```
 
-**File**: `src/components/Sidebar.ts`  
-**Type**: Vanilla TypeScript class (no framework dependency)
+Or from a specific tier:
 
-| Prop | Type | Default | Description |
-|---|---|---|---|
-| `side` | `'left' \| 'right'` | `'left'` | Which edge the sidebar attaches to |
-| `collapsed` | `boolean` | `false` | Initial collapsed state |
-| `width` | `string` | `'280px'` | Expanded width (CSS value) |
-| `collapsedWidth` | `string` | `'48px'` | Collapsed width (CSS value) |
-| `backgroundColor` | `string` | `'#ffffff'` | Background color |
-| `borderColor` | `string` | `'#e5e7eb'` | Border color |
+```typescript
+import { Button }  from '@ui/components/atoms';
+import { Card }    from '@ui/components/molecules';
+import { Sidebar } from '@ui/components/widgets';
+```
 
-**Events**: callback-based via `onToggle(callback: (collapsed: boolean) => void)`  
-**Usage**: imperative — `sidebar.setContent(html)`, `sidebar.toggle()`, `sidebar.collapse()`, `sidebar.expand()`
+### Tier: Atoms (`src/components/atoms/`)
 
----
+Single-purpose, no internal BHMUI dependencies.
 
-## Gaps — What blob-webbuilder Needs
+| Component | Export class | CSS class | Description | Status |
+|---|---|---|---|---|
+| Button | `Button` | `blob-button` | Primary action element — variants: filled, outline, ghost, danger | ✅ |
+| Input | `Input` | `blob-input` | Text input with label, helper text, error state | ✅ |
+| ChatInput | `ChatInput` | `blob-chat-input` | Multi-line AI chat input with submit button | ✅ |
+| Tag | `Tag` | `blob-tag` | Small label pill — coloured variants | ✅ |
+| Switch | `Switch` | `blob-switch` | Boolean on/off toggle (uses Button internally) | ✅ |
+| Spinner | `Spinner` | `blob-spinner` | Loading indicator — size variants | ✅ |
+| Divider | `Divider` | `blob-divider` | Horizontal section separator | ✅ |
+| Badge | `Badge` | `blob-badge` | Count / status overlay — dot and count variants | ✅ |
+| Avatar | `Avatar` | `blob-avatar` | User/entity avatar — image or initials fallback | ✅ |
+| Progress | `Progress` | `blob-progress` | Linear progress bar | ✅ |
+| Toggle | `Toggle` | `blob-toggle` | Icon-based toggle button | ✅ |
+| Checkbox | `Checkbox` | `blob-checkbox` | Labelled checkbox with indeterminate state | ✅ |
+| Radio | `Radio` | `blob-radio` | Radio button — for use in a group | ✅ |
+| Slider | `Slider` | `blob-slider` | Range slider with min/max/step | ✅ |
+| Textarea | `Textarea` | `blob-textarea` | Multi-line text input | ✅ |
+| Tooltip | `Tooltip` | `blob-tooltip` | Hover label — 4 placement options | ✅ |
+| Text | `Text` | `blob-text` | Typed text helper (`h1`–`h6`, `p`, `small`, `label`) | ✅ |
+| Counter | `Counter` | `blob-counter` | Animated numeric counter | ✅ |
+| TableCell | `TableCell` | `blob-table-cell` | `<th>` / `<td>` with sort indicators and selection | ✅ |
 
-These are the minimum components blob-webbuilder (Sprint 3) requires. Ordered by dependency. 
-
-### Tier 1 — Must exist before WB-001 (site builder canvas)
-
-| Component | Slug | Purpose in webbuilder |
-|---|---|---|
-| Button | `Button` | Toolbar actions, save/publish, modals | ❌ |
-| Icon | `Icon` | Button icons, toolbar, tree indicators | ❌ |
-| Input | `Input` | Text/URL/settings fields | ❌ |
-| Select | `Select` | Dropdown selectors (font, theme, breakpoint) | ❌ |
-
-### Tier 2 — Needed for canvas and sidebar panels
-
-| Component | Slug | Purpose in webbuilder |
-|---|---|---|
-| Card | `Card` | Component palette items, properties panel sections | ❌ |
-| Tabs | `Tabs` | Properties panel (content / style / layout tabs) | ❌ |
-| Toggle | `Toggle` | Boolean settings (show/hide, locked) | ❌ |
-| Divider | `Divider` | Panel sections | ❌ |
-
-### Tier 3 — Needed for full flows
-
-| Component | Slug | Purpose in webbuilder |
-|---|---|---|
-| Modal | `Modal` | Publish flow, unsaved changes warning | ❌ |
-| Toast | `Toast` | Save confirmation, error feedback | ❌ |
-| Tooltip | `Tooltip` | Toolbar icon labels | ❌ |
-| ColorPicker | `ColorPicker` | Style panel background/text color | ❌ |
+**Total atoms: 19**
 
 ---
 
-## Token Gaps
+### Tier: Molecules (`src/components/molecules/`)
 
-| Gap | Notes |
+Composed from atoms and/or basic DOM elements.
+
+| Component | Export class | CSS class | Description | Status |
+|---|---|---|---|---|
+| ListItem | `ListItem` | `blob-list-item` | Row with icon, label, description, and trailing action | ✅ |
+| Tabs | `Tabs` | `blob-tabs` | Tabbed content switcher | ✅ |
+| Dropdown | `Dropdown` | `blob-dropdown` | Floating menu anchored to a trigger button | ✅ |
+| Card | `Card` | `blob-card` | Elevated surface with header, body, footer slots | ✅ |
+| Modal | `Modal` | `blob-modal` | Accessible dialog overlay — size variants | ✅ |
+| Alert | `Alert` | `blob-alert` | Inline status banner — info/success/warning/danger | ✅ |
+| Toast | `Toast` | `blob-toast` | Transient notification — auto-dismiss | ✅ |
+| Select | `Select` | `blob-select` | Custom styled select with search | ✅ |
+| Accordion | `Accordion` | `blob-accordion` | Collapsible sections list | ✅ |
+| Breadcrumb | `Breadcrumb` | `blob-breadcrumb` | Navigation path trail | ✅ |
+| Pagination | `Pagination` | `blob-pagination` | Page number navigation | ✅ |
+| EmptyState | `EmptyState` | `blob-empty-state` | Zero-content placeholder with CTA | ✅ |
+| SearchBar | `SearchBar` | `blob-search-bar` | Input with search icon and clear button | ✅ |
+| Table | `Table` | `blob-table` | Full data table — sorting, selection, skeleton, density | ✅ |
+| TopBar | `TopBar` | `blob-top-bar` | App-level top navigation bar | ✅ |
+| ActionBar | `ActionBar` | `blob-action-bar` | Toolbar for bulk/contextual actions | ✅ |
+| Sparkline | `Sparkline` | `blob-sparkline` | Mini inline SVG line chart | ✅ |
+| DonutChart | `DonutChart` | `blob-donut-chart` | SVG donut chart with legend | ✅ |
+| LineChart | `LineChart` | `blob-line-chart` | SVG multi-series line chart | ✅ |
+| BarChart | `BarChart` | `blob-bar-chart` | SVG grouped / stacked bar chart | ✅ |
+
+**Total molecules: 20**
+
+---
+
+### Tier: Widgets (`src/components/widgets/`)
+
+Full standalone feature components — each can own the full viewport.
+
+| Component | Export class | CSS class | Description | Status |
+|---|---|---|---|---|
+| Sidebar | `Sidebar` | `blob-sidebar` | Collapsible page sidebar — left or right | ✅ |
+| TopNav | `TopNav` | `blob-top-nav` | Full-width navigation with links and auth action | ✅ |
+| FileTree | `FileTree` | `blob-file-tree` | Hierarchical file/folder explorer | ✅ |
+| TokenEditor | `TokenEditor` | `blob-token-editor` | Visual CSS token editor — sections and fields | ✅ |
+| WidgetMeta | — | — | Shared type definition for widget registry metadata | ✅ |
+
+**Total widgets: 5**
+
+---
+
+## Summary
+
+| Tier | Count | Status |
+|---|---|---|
+| Atoms | 19 | ✅ All implemented |
+| Molecules | 20 | ✅ All implemented |
+| Widgets | 5 | ✅ All implemented |
+| **Total** | **44 components** | **✅ Zero gaps** |
+
+---
+
+## What Is NOT in BHMUI (by design)
+
+| Item | Reason |
 |---|---|
-| Actual color values missing | `themeTokens` stores Tailwind class names as strings, not hex/hsl. Components can't use them directly without a Tailwind CSS environment. |
-| Spacer tokens are named references | `deviceTokens` maps `"m - spacer"` → `"space-1.25"` — these are Tailwind class names, not raw values. |
-| Shadow tokens incomplete | `funky`, `tech`, `edgy` themes have no content yet — only `classic`, `international`, `cofe` are populated. |
-| No animation/motion tokens | `token-system.md` proposes them but none exist yet. |
+| ColorPicker | Complex — planned for Widget Builder phase |
+| RichTextEditor | Third-party integration (ProseMirror) — out of scope for primitives |
+| DatePicker / Calendar | Complex — deferred |
+| DataGrid (virtual scroll) | Deferred until blob-database-builder needs it |
+| Icon system | Uses system emoji or caller-provided SVG — no icon library bundled |
