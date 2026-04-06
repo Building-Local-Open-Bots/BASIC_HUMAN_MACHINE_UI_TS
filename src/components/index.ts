@@ -8,3 +8,4 @@ export { sidebar, type sidebaroptions } from './sidebar';
 export { filetree, type filetreenode, type filetreeoptions } from './file-tree';
 export { tokeneditor, type tokeneditorsection, type tokenfield, type tokenediteroptions } from './token-editor';
 export { type widgetmeta } from './widget-meta';
+export { TopNav, type NavItem, type TopNavOptions } from './top-nav';

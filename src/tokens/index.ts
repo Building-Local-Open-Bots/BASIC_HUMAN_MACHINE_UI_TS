@@ -3,3 +3,4 @@ export * from "./scaling-tokens";
 export * from "./device-tokens";
 export * from "./color-variables";
 export * from "./font-variables";
+export { applyTheme, detectMode } from "./apply-theme";
