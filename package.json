@@ -21,10 +21,16 @@
       "import": "./dist/components/index.js",
       "require": "./dist/components/index.cjs",
       "types": "./dist/components/index.d.ts"
+    },
+    "./themes": {
+      "import": "./dist/themes/index.js",
+      "require": "./dist/themes/index.cjs",
+      "types": "./dist/themes/index.d.ts"
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "src"
   ],
   "scripts": {
     "build": "tsup",
