@@ -1,5 +1,5 @@
 {
-  "name": "@blob/bhmui",
+  "name": "@blob/ui",
   "version": "0.1.0",
   "description": "BASIC HUMAN MACHINE UI — design tokens and components for the BLOB ecosystem",
   "type": "module",
