@@ -251,7 +251,7 @@ export class BarChart {
       LEFT: number; TOP: number; BOTTOM: number; VH: number; VW: number;
     },
   ): void {
-    const { data, groups, seriesColors, palette, showGrid, showValues, xLabel, yLabel, plotW, plotH, LEFT, TOP, BOTTOM, VH } = ctx;
+    const { data, groups, seriesColors, palette, showGrid, showValues, xLabel, yLabel, plotW, plotH, LEFT, TOP, VH } = ctx;
 
     const isGrouped = !!groups?.length;
 

@@ -144,12 +144,10 @@ export class Textarea {
   public textareaEl!:   HTMLTextAreaElement;
   private _countEl:     HTMLElement | null = null;
   private _opts:        TextareaOptions;
-  private _hasError:    boolean = false;
 
   constructor(options: TextareaOptions = {}) {
     injectStyles();
     this._opts    = options;
-    this._hasError = !!options.error;
     this.element  = this.build();
   }
 
@@ -243,7 +241,6 @@ export class Textarea {
 
   public setError(msg: string): void {
     this._opts.error = msg;
-    this._hasError   = true;
     this.element.classList.add('blob-textarea--error');
     const helperEl = this.element.querySelector('.blob-textarea-helper');
     if (helperEl) helperEl.textContent = msg;
@@ -263,7 +260,6 @@ export class Textarea {
 
   public clearError(): void {
     this._opts.error = undefined;
-    this._hasError   = false;
     this.element.classList.remove('blob-textarea--error');
     this.element.querySelector('.blob-textarea-helper')?.remove();
   }

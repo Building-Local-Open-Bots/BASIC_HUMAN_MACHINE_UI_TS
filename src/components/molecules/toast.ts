@@ -188,7 +188,7 @@ export class Toast {
   }
 
   private build(): HTMLElement {
-    const { variant = 'info', title, message, duration = 4000, dismissible = true } = this._opts;
+    const { variant = 'info', title, message, dismissible = true } = this._opts;
 
     const el = document.createElement('div');
     el.className = `blob-toast blob-toast--${variant}`;

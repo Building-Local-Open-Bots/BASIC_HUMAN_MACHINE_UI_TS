@@ -181,7 +181,7 @@ export class Alert {
   }
 
   private build(): HTMLElement {
-    const { variant = 'info', title, message, icon, dismissible = false, onDismiss } = this._opts;
+    const { variant = 'info', title, message, icon, dismissible = false } = this._opts;
 
     const el = document.createElement('div');
     el.className = `blob-alert blob-alert--${variant}`;
